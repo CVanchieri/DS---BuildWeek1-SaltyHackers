@@ -1,0 +1,35 @@
+Saltiest Hacker News Trolls
+
+Name
+Saltiest Hacker News Trolls
+
+Pitch
+Build an app that uses Hacker News comment data to rank commenters based on comment sentiment (saltiness/negativity).
+
+MVP
+App rates and ranks hacker news commenters by negativity of comment sentiment (limited to commenters who have made x number of posts). Allows users to search by username to view comments and sentiment levels of specific users.
+
+DS: 
+- Decide what volume/frequency of user comments to use as a threshold (i.e. top 1000 most frequent users)
+- Score HN user negativity using sentiment analysis techniques on their comments 
+- Rank-order users based on negativity score and do the same with their top n comments
+- Make rankings and comments accessible to the rest of the team. E.g. deploy rankings via Flask App (or equivalent) to receive inputs (HN username), and output negativity score & ranking in JSON format.
+
+Web:
+- User creation/login flow
+- User can view a feed of negative comments from DS API
+- User can save their favorite salty comments to the backend
+- User can delete saved comments
+
+Stretch
+App also displays the sentiment of individual comments by user allowing drilldown to a user view.
+
+DS:
+- Expand the scope of the sentiment analysis beyond positive or negative to include things like humor, etc. 
+- Provided dataset extends only to late 2017. Source additional data and leverage it to improve your model. 
+- Help create visualizations for the trolls that show up most frequently
+
+Web:
+- Create a way to share the funniest/worst trolls on twitter.
+- Use filter to display the cards in different ways depending on what the user wants to see and what is available in the DS API (ie funniest, most sarcastic, etc.)
+- Create a way to visualize the trolls that show up most frequently in a given time period.
