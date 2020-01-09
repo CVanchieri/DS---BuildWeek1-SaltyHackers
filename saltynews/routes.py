@@ -1,7 +1,7 @@
 
 from flask import Flask, jsonify, render_template
 from flask_json import FlaskJSON, json_response
-from saltynews import app, bigquery
+from saltynews import app
 from saltynews.models import User, Comments
 
 

@@ -1,8 +1,6 @@
 """ Model schema for SQL table classes """
-
-from saltynews import bigquery
-
-db = bigquery
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 class User(db.Model):
     user_name = db.Column(db.String(100), primary_key=True)
