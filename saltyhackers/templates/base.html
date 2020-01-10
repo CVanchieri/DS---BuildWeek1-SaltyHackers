@@ -3,26 +3,23 @@
 <html>
         <head>
                 <title>
-                  HackerNews - {{title}}
+                  SaltyHackers - {{title}}
                 </title>
 
         </head>
         <body>
-                <font color="grey"><h1>HackerNews!</h1>
+                <font color="grey"><h1>SaltyHackers!</h1>
 
                 {% block content %}
                 <div>
                 <font color="grey"><font size=1>
                   <nav>
-                    <div class="menu">
-                      <a href="/update" class="button warning">Update Ranking List</a>
-                    </div>
                 <h3>
                  Enter the @username to see how salty they are.
                </h3>
                 <form action="/user" method="post">
-                        <input type="text" name="by" placeholder="User to add">
-                        <input type="submit" name="Add User">
+                        <input type="text" name="by" placeholder="User Name Here">
+                        <input type="submit" name="Check User">
                 </form>
                 </div>
 

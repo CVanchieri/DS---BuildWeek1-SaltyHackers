@@ -1,5 +1,5 @@
 # imports.
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -18,17 +18,16 @@ def create_app():
         
         
         
-        return ("Landing Page Here")
+        return render_template('base.html', title='Home')
 
 
 # user search route.
-    @app.route('/user', methods=['POST'])
+    @app.route('/username', methods=['GET'])
     #@app.route('/user/<name>', methods=['GET'])
-    def user(name=None, message=''):
-        #name = name or request.values['by']
-
-        return ("This will be a 'user' page , lists their comments and saltiness.")
-
+    def get_user(username):
+        db_user = db.select([HNTopComments.columns.author, HNTopComments.columns.rating, HNTopComments.columns.ranking]).where(HNTopComments.columns.author == 'username')
+        
+        return {"username":author, "negativity score":rating, "negativity rank":ranking}
 
 # return/complete the 'app'.
     return app
