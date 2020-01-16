@@ -1,0 +1,1 @@
+web: gunicorn saltyhackers:APP -t 120

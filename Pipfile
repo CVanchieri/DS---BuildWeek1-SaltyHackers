@@ -10,7 +10,9 @@ v = {editable = true,version = "*"}
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
-flask-json = "*"
+requests = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"

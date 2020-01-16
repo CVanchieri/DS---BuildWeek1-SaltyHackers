@@ -1,33 +1,67 @@
 # imports.
-from flask import Flask, request, render_template
-from flask import jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+import pickle as pkl
+from .models import db, HNTopCommentors
 
-# function for app.
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+
+
+#FLASK_APP=saltyhackers:APP FLASK_ENV=development flask run
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ibnzqkfl:rYgeprTJq6jD_eR0bxEXwAnYX7fM-yRD@rajje.db.elephantsql.com:5432/ibnzqkfl' 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#db = SQLAlchemy()
+some_engine = create_engine('postgres://ibnzqkfl:rYgeprTJq6jD_eR0bxEXwAnYX7fM-yRD@rajje.db.elephantsql.com:5432/ibnzqkfl')
+# create a configured "Session" class
+Session = sessionmaker(bind=some_engine)
+# create a Session
+session = Session()
+db.init_app(app)
+
 def create_app():
-    app = Flask(__name__)
-    # set the DQL to postgress connection.
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ibnzqkfl:rYgeprTJq6jD_eR0bxEXwAnYX7fM-yRD@rajje.db.elephantsql.com:5432/ibnzqkfl'
-    db = SQLAlchemy(app)
-    
+    """Create and configure an instance of the Flask application"""
 
-# landing page route.
     @app.route('/')
     def root():
-        # create the dataframe with 30,000 rows, ElephantSQL limits it 20MB.
-        
-        
-        
-        return render_template('base.html', title='Home')
+
+        return ('SaltyHackers!')
 
 
-# user search route.
-    @app.route('/username', methods=['GET'])
-    #@app.route('/user/<name>', methods=['GET'])
+    # user search route.
+    @app.route('/user/<string:username>', methods=['GET', 'PUSH'])
     def get_user(username):
-        db_user = db.select([HNTopComments.columns.author, HNTopComments.columns.rating, HNTopComments.columns.ranking]).where(HNTopComments.columns.author == 'username')
-        
-        return {"username":author, "negativity score":rating, "negativity rank":ranking}
+        if type(username) is str:
+            #queries the database for that authors comments
+            author_comments = session.query(HNTopCommentors.author, HNTopCommentors.text, HNTopCommentors.neg, HNTopCommentors.ranking, HNTopCommentors.average).first()
+            #print(author_comments)
+            # Grabs authors rank
+            ranking = author_comments.ranking#.ranking needs to be finished.
+            # Grabs authors average neg score
+            avg_negative = author_comments.average#.average needs to be finished.
+            # Returns data in json format
+            return jsonify({"UserName": username, "Negative Score": avg_negative, "negative Rank": ranking})
+            #return jsonify({"Last Comment": author_comments})
+        return jsonify({"Status": 'Failed'})
 
-# return/complete the 'app'.
+
+    # comment negativity scoring route
+    @app.route('/comments/<string:comment>', methods=['GET', 'PUSH'])
+    def comments(comment):
+        if type(comment) is str:
+            # Open and read pickled model
+            with open('model.pkl', 'rb') as file:
+                # Load it into a useable format
+                model = pkl.load(file)
+            # Use the model on given comment
+            neg, neu, pos, rating = model.polarity_scores(comment)
+            # Return score in json
+            return jsonify({'comment': comment, 'neg_score': neg}) 
+        return jsonify({'Status': 'Failed'})
+
     return app
+
+
